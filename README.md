@@ -6,7 +6,8 @@ This a undergraduate course page of Machine Learning Methods and Applications in
 
 ### Training Linear Regression Model (R)  
 
-[PDF](https://github.com/tfnbstn/machine-learning/blob/dafec735a62fadff473afe74b9468dd520b05a93/Machine%20Learning/PDF/Training%20Linear%20Regression%20Model%20in%20R.pdf)[Code]
+#### →[PDF](https://github.com/tfnbstn/machine-learning/blob/dafec735a62fadff473afe74b9468dd520b05a93/Machine%20Learning/PDF/Training%20Linear%20Regression%20Model%20in%20R.pdf) 
+#### →[Code]
 
 
 ### Week 2. Supervised Learning: Linear regression models
