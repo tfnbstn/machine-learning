@@ -7,12 +7,13 @@ This a undergraduate course page of Machine Learning Methods and Applications in
 ### Training Linear Regression Model (R)  
 
 #### →[PDF](https://github.com/tfnbstn/machine-learning/blob/dafec735a62fadff473afe74b9468dd520b05a93/Machine%20Learning/PDF/Training%20Linear%20Regression%20Model%20in%20R.pdf) 
-#### →[Code]
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/ad364631a600706ec54beee9c75ca1e789468c9d/Machine%20Learning/R/Training%20Linear%20Regression%20Model)
 
 
-### Week 2. Supervised Learning: Linear regression models
+### Training a Logistic Regression Model (R)
 
-[Video](https://youtu.be/KTtjO9Vmlmc) ❖ [Slides](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/Slides/week2.pdf) ❖ [Homework](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/Homeworks/Week%202/README.md) ❖ [Exercises](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/Exercises/Week2) ❖ [Watchlist](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/WatchList.md) ❖ [Readlist](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/ReadList.md)
+#### →[PDF] (https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/PDF/Training%20a%20Logistic%20Regression%20Model%20in%20R.pdf) 
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/R/Training%20a%20Logistic%20Regression%20Model)
 
 
 ### Week 3. Supervised Learning: Logistic regression models
