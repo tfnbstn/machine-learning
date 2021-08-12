@@ -4,9 +4,10 @@ This a undergraduate course page of Machine Learning Methods and Applications in
 
 ## Contents
 
-### Week 1. Introduction to Machine Learning: Basics, Differences between statistics, Computation tools (R)  
+### Training Linear Regression Model (R)  
 
-[Video](https://youtu.be/04WiD__N5Gk) ❖ [Slides](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/Slides/STAT438-Week1.pdf) ❖ [Homework](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/tree/main/Homeworks/Week%201) ❖ [Exercises](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/Exercises/Week%201) ❖ [Watchlist](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/WatchList.md) ❖ [Readlist](https://github.com/mcavs/Machine-Learning-Methods-and-Applications/blob/main/ReadList.md)
+❖[PDF](https://github.com/tfnbstn/machine-learning/blob/dafec735a62fadff473afe74b9468dd520b05a93/Machine%20Learning/PDF/Training%20Linear%20Regression%20Model%20in%20R.pdf)
+❖[Code]
 
 
 ### Week 2. Supervised Learning: Linear regression models
