@@ -7,24 +7,24 @@ This a undergraduate course page of Machine Learning Methods and Applications in
 ### Training Linear Regression Model (R)  
 
 #### →[PDF](https://github.com/tfnbstn/machine-learning/blob/dafec735a62fadff473afe74b9468dd520b05a93/Machine%20Learning/PDF/1.Training%20Linear%20Regression%20Model%20in%20R.pdf) 
-#### →[Code](https://github.com/tfnbstn/machine-learning/blob/ad364631a600706ec54beee9c75ca1e789468c9d/Machine%20Learning/R/1.Training%20Linear%20Regression%20Model)
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/31d3b4266d069ca1798490bd723ee0be797fa659/Machine%20Learning/R/1.Training%20Linear%20Regression%20Model.Rmd)
 
 
 ### Training a Logistic Regression Model (R)
 
 #### →[PDF](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/PDF/2.Training%20a%20Logistic%20Regression%20Model%20in%20R.pdf) 
-#### →[Code](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/R/2.Training%20a%20Logistic%20Regression%20Model)
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/R/2.Training%20a%20Logistic%20Regression%20Model.Rmd)
 
 
 ### Training Multinomial Regression Model (R)
 
 #### →[PDF](https://github.com/tfnbstn/machine-learning/blob/e33dd5ea9f700d786cfb33420c1333c09a2b64f2/Machine%20Learning/PDF/3.Training%20Multinomial%20Regression%20Model%20in%20R.pdf)
-#### →[Code](https://github.com/tfnbstn/machine-learning/blob/c1b5065fcb3559b7305accc67373563bbbc10ba3/Machine%20Learning/R/3.Training%20Multinomial%20Regression%20Model)
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/c1b5065fcb3559b7305accc67373563bbbc10ba3/Machine%20Learning/R/3.Training%20Multinomial%20Regression%20Model.Rmd)
 
 ### Using Feature Engineering Methods to Improve Model Performance (R)
 
 #### →[PDF](https://github.com/tfnbstn/machine-learning/blob/ad32add04382b7400e133f591ea252acf46953ba/Machine%20Learning/PDF/4.Using%20Feature%20Engineering%20Methods%20to%20Improve%20Model%20Performance%20.pdf)
-#### →[Code](https://github.com/tfnbstn/machine-learning/blob/ad32add04382b7400e133f591ea252acf46953ba/Machine%20Learning/R/4.Using%20Feature%20Engineering%20Methods%20to%20Improve%20Model%20Performance)
+#### →[Code](https://github.com/tfnbstn/machine-learning/blob/ad32add04382b7400e133f591ea252acf46953ba/Machine%20Learning/R/4.Using%20Feature%20Engineering%20Methods%20to%20Improve%20Model%20Performance.Rmd)
 
 ### Performance comparison of models trained with Decision Trees and Multivariate (R)
 
