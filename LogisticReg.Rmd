@@ -11,8 +11,6 @@ data <- SportsCards
 head(data)
 ```
 
-
-
 ```{r}
 set.seed(2380)
 data_splitted <- sample(nrow(data), nrow(data) * 0.8) #Spliting data into two parts
@@ -25,7 +23,6 @@ summary(SportsCards$trade)
 model <- glm(trade ~.,data = training_data, family = "binomial") 
 summary(model)
 ```
-
 
 ```{r}
 predicted_probs_train <- predict(model,type = "response")
