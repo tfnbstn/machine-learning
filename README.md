@@ -12,7 +12,7 @@ This a undergraduate course page of Machine Learning Methods and Applications in
 
 ### Training a Logistic Regression Model (R)
 
-#### →[PDF] (https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/PDF/Training%20a%20Logistic%20Regression%20Model%20in%20R.pdf) 
+#### →[PDF](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/PDF/Training%20a%20Logistic%20Regression%20Model%20in%20R.pdf) 
 #### →[Code](https://github.com/tfnbstn/machine-learning/blob/7c0b350c1513860efecd2528cceafdc9df2a7615/Machine%20Learning/R/Training%20a%20Logistic%20Regression%20Model)
 
 
