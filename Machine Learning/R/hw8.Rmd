@@ -1,0 +1,108 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+DATA STRUCTURE
+```{r}
+data <- DALEX::dragons
+head(data)
+str(data)
+summary(data)
+```
+
+
+SPLITTING DATA
+```{r}
+library(caret)
+set.seed(2380)
+index <- createDataPartition(data$year_of_birth, p = 0.75,
+list = FALSE, times = 1)
+train <- data[index,]
+test <- data[-index,]
+nrow(train)
+nrow(test)
+```
+
+LINEAR REGRESSİON MODEL
+
+```{r}
+#Traing Model
+model_LM <- lm(life_length~. ,data=train)
+#Performance for Train
+predicted_train_LM <- predict(model_LM, train)
+rmse_train_LM <-sqrt(mean((predicted_train_LM - train$life_length) ^ 2))
+
+#Performance for Test
+predicted_test_LM <- predict(model_LM, test)
+rmse_test_LM <- sqrt(mean((predicted_test_LM - test$life_length) ^ 2))
+
+cat("test_rmse:", rmse_test_LM,"\n")
+cat("train_rmse:", rmse_train_LM)
+```
+
+REGRESSION TREE
+```{r}
+# Training a regression tree on the dragons data
+library(rpart)
+library(rpart.plot)
+model_DT <- rpart(life_length ~. , method = "anova", data = train)
+
+#Performance for test
+predicted_test_DT <- predict(model_DT, test)
+rmse_test_DT <- sqrt(mean((predicted_test_DT - test$life_length) ^ 2))
+
+#Performance for train
+predicted_train_DT <- predict(model_DT, train)
+rmse_train_DT <- sqrt(mean((predicted_train_DT - train$life_length) ^ 2))
+
+cat("test_rmse_dt:", rmse_test_DT,"\n")
+cat("train_rmse_dt:", rmse_train_DT)
+```
+
+
+TRAINING BEGGING TREE
+```{r}
+library(randomForest)
+model_BT <- randomForest(life_length~. , data=train, mtry= 7)
+
+#Performance for test
+predicted_test_BT <- predict(model_BT, test)
+rmse_test_BT <- sqrt(mean((predicted_test_BT - test$life_length) ^ 2))
+
+#Performance for train
+predicted_train_BT <- predict(model_BT, train)
+rmse_train_BT <- sqrt(mean((predicted_train_BT - train$life_length) ^ 2))
+
+cat("test_rmse_dt:", rmse_test_BT,"\n")
+cat("train_rmse_dt:", rmse_train_BT)
+
+```
+
+RANDOM FOREST
+
+```{r}
+model_RF <- randomForest(life_length ~ ., data = train)
+#Performance for test
+predicted_test_RF <- predict(model_RF, test)
+rmse_test_RF <- sqrt(mean((predicted_test_RF - test$life_length) ^ 2))
+
+#Performance for train
+predicted_train_RF <- predict(model_RF, train)
+rmse_train_RF <- sqrt(mean((predicted_train_RF - train$life_length) ^ 2))
+
+cat("test_rmse_dt:", rmse_test_RF,"\n")
+cat("train_rmse_dt:", rmse_train_RF)
+```
+
+
+
+```{r}
+#Comparing models performances
+data.frame(
+  "TEST" = c(rmse_test_BT,rmse_test_DT,rmse_test_LM,rmse_test_RF),
+  "TRAIN" = c(rmse_train_BT,rmse_train_DT,rmse_train_LM,rmse_train_RF),
+  row.names = c("BEGGING TREE", "DECISION TREE","LINEAR MODEL","RANDOM FOREST")
+)
+```
+

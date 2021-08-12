@@ -1,0 +1,232 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+#install.packages("tidymodels")
+#install.packages("catdata")
+#install.packages("dplyr")
+library(tidymodels)
+library(catdata)
+library(dplyr)
+data(heart)
+data <- data.frame(heart)
+head(data,10)
+```
+
+```{r}
+data$y <- as.factor(data$y)
+data$famhist <- as.factor(data$famhist)
+str(data)
+summary(data)
+```
+```{r}
+set.seed(2380) # for reproducebility
+# data splitting
+data_split <- initial_split(data, prop = 0.80, strata = y)
+# creating train set
+data_train <- data_split %>%
+training()
+# creating test set
+data_test <- data_split %>%
+testing()
+# dimension of train and test set
+dim(data_train)
+dim(data_test)
+table(data_train$y);table(data_test$y)
+```
+
+
+```{r}
+logistic_model <- logistic_reg() %>%
+set_engine('glm') %>% set_mode('classification')
+# Fitting a linear regression model
+logistic_fit <- logistic_model %>%
+fit(y ~ ., data = data_train)
+# Obtaining the estimated parameters
+tidy(logistic_fit)
+```
+
+
+FOR TRAIN
+
+
+```{r}
+# Estimated labels
+data_labels_train <- logistic_fit %>%
+predict(new_data = data_train, type = 'class')
+head(data_labels_train, 5)
+# Estimated probabilities
+data_preds_train <- logistic_fit %>%
+predict(new_data = data_train, type = 'prob')
+head(data_preds_train, 5)
+```
+
+
+```{r}
+data_results_train <- data_train %>%
+  dplyr::select(y) %>%
+  bind_cols(data_preds_train, data_labels_train)
+head(data_results_train,10)
+# Confusion matrix
+conf_mat(data_results_train, truth = y, estimate = .pred_class) %>%
+summary()
+```
+
+
+
+FOR TEST
+
+```{r}
+# Estimated labels
+data_labels_test <- logistic_fit %>%
+predict(new_data = data_test, type = 'class')
+head(data_labels_test, 5)
+# Estimated probabilities
+data_preds_test <- logistic_fit %>%
+predict(new_data = data_test, type = 'prob')
+head(data_preds_test, 5)
+```
+
+```{r}
+data_results_test <- data_test %>%
+  dplyr::select(y) %>%
+  bind_cols(data_preds_test, data_labels_test)
+head(data_results_test,10)
+# Confusion matrix
+conf_mat(data_results_test, truth = y, estimate = .pred_class) %>%
+summary()
+```
+
+```{r}
+# heatmap of the confusion matrix
+conf_mat(data_results_test, truth = y, estimate = .pred_class) %>%
+  autoplot(type = 'heatmap')
+conf_mat(data_results_train, truth = y, estimate = .pred_class) %>%
+  autoplot(type = 'heatmap')
+```
+
+```{r}
+# Visualizing performance across thresholds
+data_results_test %>%
+  roc_curve(truth = y, estimate = .pred_0) %>%
+  autoplot()
+data_results_train %>%
+  roc_curve(truth = y, estimate = .pred_0) %>%
+  autoplot()
+```
+
+```{r}
+# Calculating ROC AUC
+roc_auc(data_results_test, truth = y, .pred_0)
+roc_auc(data_results_train, truth = y, .pred_0)
+```
+
+
+
+AUTOMATING
+
+
+
+FEATURE ENGINEERING
+FOR TEST
+
+```{r}
+data_recipe <- recipe(y ~ ., data = data_train) %>%
+  # Removed correlated predictors
+  step_corr(all_numeric(), threshold = 0.8) %>%
+  # Normalize numeric predictors
+  step_normalize(all_numeric()) %>%
+  # Create dummy variables
+  step_dummy(all_nominal(), -all_outcomes())
+# Train recipe
+data_recipe_prep <- data_recipe %>%
+  prep(training = data_train)
+# Transform training data
+data_train_prep <-data_recipe_prep %>%
+  bake(new_data = data_train)
+# Transform test data
+data_test_prep <- data_recipe_prep %>%
+  bake(new_data = data_test)
+```
+
+
+```{r}
+# Train logistic model
+logistic_fit <- logistic_model %>%
+  fit(y ~., data = data_train_prep)
+
+# Obtain class predictions
+class_preds <- predict(logistic_fit, new_data = data_test_prep,type = 'class')
+
+# Obtain estimated probabilities
+prob_preds <- predict(logistic_fit, new_data = data_test_prep,type = 'prob')
+
+# Combine test set results
+data_results_feature <- data_test_prep %>%
+  dplyr::select(y) %>%
+  bind_cols(class_preds, prob_preds)
+# calculating accuracy
+conf_mat(data_results_feature, truth = y, estimate = .pred_class) %>%
+summary()
+# Visualizing performance across thresholds
+data_results_feature %>%
+  roc_curve(truth = y, estimate = .pred_0) %>%
+  autoplot()
+# Calculating ROC AUC
+roc_auc(data_results_feature, truth = y, .pred_0)
+```
+
+FOR TRAIN
+
+```{r}
+
+# Obtain class predictions
+class_preds_train <- predict(logistic_fit, new_data = data_train_prep,type = 'class')
+
+# Obtain estimated probabilities
+prob_preds_train <- predict(logistic_fit, new_data = data_train_prep,type = 'prob')
+
+# Combine test set results
+data_results_feature_train <- data_train_prep %>%
+  dplyr::select(y) %>%
+  bind_cols(class_preds_train, prob_preds_train)
+# calculating accuracy
+conf_mat(data_results_feature_train, truth = y, estimate = .pred_class) %>%
+summary()
+# Visualizing performance across thresholds
+data_results_feature_train %>%
+  roc_curve(truth = y, estimate = .pred_0) %>%
+  autoplot()
+# Calculating ROC AUC
+roc_auc(data_results_feature_train, truth = y, .pred_0)
+```
+
+```{r}
+acc_before_test <- accuracy(data_results_test,truth = y, estimate = .pred_class)
+acc_before_train <- accuracy(data_results_train,truth = y, estimate = .pred_class)
+spc_before_test <- spec(data_results_test,truth = y, estimate = .pred_class)
+spc_before_train <- spec(data_results_train,truth = y, estimate = .pred_class)
+sen_before_test <- sens(data_results_test,truth = y, estimate = .pred_class)
+sen_before_train <- sens(data_results_train,truth = y, estimate = .pred_class)
+auc_before_test <- roc_auc(data_results_test, truth = y, .pred_0)
+auc_before_train <- roc_auc(data_results_train, truth = y, .pred_0)
+acc_after_test <- accuracy(data_results_feature,truth = y, estimate = .pred_class)
+acc_after_train <- accuracy(data_results_feature_train,truth = y, estimate = .pred_class)
+spc_after_test <- spec(data_results_feature,truth = y, estimate = .pred_class)
+spc_after_train <- spec(data_results_feature_train,truth = y, estimate = .pred_class)
+sen_after_test <- sens(data_results_feature,truth = y, estimate = .pred_class)
+sen_after_train <- sens(data_results_feature_train,truth = y, estimate = .pred_class)
+auc_after_test <- roc_auc(data_results_feature, truth = y, .pred_0)
+auc_after_train <- roc_auc(data_results_feature_train, truth = y, .pred_0)
+comp <- data.frame( "Before"=c(acc_before_test$.estimate,acc_before_train$.estimate,spc_before_test$.estimate,spc_before_train$.estimate,sen_before_test$.estimate,sen_before_train$.estimate,auc_before_test$.estimate,auc_before_train$.estimate),
+                    "After"=c(acc_after_test$.estimate,acc_after_train$.estimate,spc_after_test$.estimate,spc_after_train$.estimate,sen_after_test$.estimate,sen_after_train$.estimate,auc_after_test$.estimate,auc_after_train$.estimate),
+                    row.names = c("Test Accuracy","Train Accuracy","Test Specificity", "Train Specificity", "Test Sensitivity","Train Sensitivity", "Test Area Under Curve", "Train Area Under Curve")
+)
+comp
+```
+
+
+
+

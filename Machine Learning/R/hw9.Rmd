@@ -1,0 +1,160 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+data <- palmerpenguins::penguins
+anyNA(data)
+dim(data)
+data <- na.omit(data)
+anyNA(data)
+dim(data)
+```
+
+
+
+DATA STRUCTURE
+```{r}
+head(data)
+str(data)
+summary(data)
+```
+
+
+
+SPLITTING DATA
+
+```{r}
+#Splitting Data
+library(caret)
+set.seed(2380)
+index <- createDataPartition(data$body_mass_g, p = 0.75,
+list = FALSE, times = 1)
+train <- data[index,]
+test <- data[-index,]
+nrow(train)
+nrow(test)
+```
+
+
+
+LINEAR REGRESSİON MODEL
+
+```{r}
+#Traing the Model
+model_LM <- lm(body_mass_g~. ,data=train)
+#Performance for Train
+predicted_train_LM <- predict(model_LM, train)
+rmse_train_LM <-sqrt(mean((predicted_train_LM - train$body_mass_g) ^ 2))
+
+#Performance for Test
+predicted_test_LM <- predict(model_LM, test)
+rmse_test_LM <- sqrt(mean((predicted_test_LM - test$body_mass_g) ^ 2))
+
+cat("test_rmse:", rmse_test_LM,"\n")
+cat("train_rmse:", rmse_train_LM)
+```
+
+
+REGRESSION TREE
+
+```{r}
+#Training the Model
+library(rpart)
+library(rpart.plot)
+model_DT <- rpart(body_mass_g ~. , method = "anova", data = train)
+
+#Performance for test
+predicted_test_DT <- predict(model_DT, test)
+rmse_test_DT <- sqrt(mean((predicted_test_DT - test$body_mass_g) ^ 2))
+
+#Performance for train
+predicted_train_DT <- predict(model_DT, train)
+rmse_train_DT <- sqrt(mean((predicted_train_DT - train$body_mass_g) ^ 2))
+
+cat("test_rmse:", rmse_test_DT,"\n")
+cat("train_rmse:", rmse_train_DT)
+```
+
+
+
+BEGGING TREE
+```{r}
+#Training the Model
+set.seed(2380)
+library(randomForest)
+model_BT <- randomForest(body_mass_g~. , data=train, mtry= 7)
+plot(model_BT,col="red")
+which.min(model_BT$mse)
+#Performance for test
+predicted_test_BT <- predict(model_BT, test)
+rmse_test_BT <- sqrt(mean((predicted_test_BT - test$body_mass_g) ^ 2))
+
+#Performance for train
+predicted_train_BT <- predict(model_BT, train)
+rmse_train_BT <- sqrt(mean((predicted_train_BT - train$body_mass_g) ^ 2))
+
+cat("test_rmse:", rmse_test_BT,"\n")
+cat("train_rmse:", rmse_train_BT)
+
+```
+
+
+RANDOM FOREST
+
+```{r}
+#Training Model
+set.seed(2380)
+model_RF <- randomForest(body_mass_g ~ ., data = train)
+plot(model_RF,col  = "blue")
+which.min(model_RF$mse)
+#Performance for test
+predicted_test_RF <- predict(model_RF, test)
+rmse_test_RF <- sqrt(mean((predicted_test_RF - test$body_mass_g) ^ 2))
+
+#Performance for train
+predicted_train_RF <- predict(model_RF, train)
+rmse_train_RF <- sqrt(mean((predicted_train_RF - train$body_mass_g) ^ 2))
+
+cat("test_rmse:", rmse_test_RF,"\n")
+cat("train_rmse:", rmse_train_RF)
+```
+
+
+
+
+GRADIENT BOOSTED MODEL
+
+```{r}
+library(gbm)
+#Training Model
+set.seed(2380)
+model_GBM <- gbm(body_mass_g ~ ., data = train, distribution = "gaussian", n.trees = 100, cv.folds = 5)
+gbm.perf(model_GBM)
+#Performance for test
+predicted_test_GBM <- predict(model_GBM, test)
+rmse_test_GBM <- sqrt(mean((predicted_test_GBM - test$body_mass_g) ^ 2))
+
+#Performance for train
+predicted_train_GBM <- predict(model_GBM, train)
+rmse_train_GBM <- sqrt(mean((predicted_train_GBM - train$body_mass_g) ^ 2))
+
+cat("test_rmse:", rmse_test_GBM,"\n")
+cat("train_rmse:", rmse_train_GBM)
+```
+
+
+
+
+
+
+
+```{r}
+#Comparing models performances
+data.frame(
+  "TEST" = c(rmse_test_BT,rmse_test_DT,rmse_test_LM,rmse_test_RF,rmse_test_GBM),
+  "TRAIN" = c(rmse_train_BT,rmse_train_DT,rmse_train_LM,rmse_train_RF,rmse_train_GBM),
+  row.names = c("BEGGING TREE", "DECISION TREE","LINEAR MODEL","RANDOM FOREST","GRADIENT BOOSTED")
+)
+```

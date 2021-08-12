@@ -1,0 +1,84 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+#Obtaining Data form its source:
+#install.packages("DALEX") 
+library(DALEX)
+data <- DALEX::HR                            #The data assigned to "data".
+data$evaluation <-as.factor(data$evaluation) #Variable type chanced to factor
+data$salary <-as.factor(data$salary)         #Variable type chanced to factor
+head(data)                                   #First 6 row were obtained. 
+```
+
+```{r}
+#Structure of The Data:
+str(data)          
+table(data$status)                           #To see levels of target variable.
+summary(data)
+```
+
+
+```{r}
+#Splitting Data and Train a MLRM on train set:
+set.seed(2380)
+index <- sample(nrow(data),nrow(data)*0.8)
+train <- data[index,]
+test <- data[-index,]
+table(train$status);table(test$status)
+```
+
+```{r}
+#Training a MLRM
+train$status <- relevel(train$status, ref = "ok")
+library(nnet)                                #To use "multinom()" function.
+model <- multinom(status ~., data = train, trace = F)
+summary(model)
+```
+
+
+```{r}
+#Significance of the features:
+z <- summary(model)$coefficients/summary(model)$standard.errors
+p <- (1-pnorm(abs(z),0,1))*2
+p
+```
+
+```{r}
+#Interpreting the model features:
+exp(coef(model))
+```
+
+```{r}
+#Predicted Probablities of the target variable:
+predicted_probs <- predict(model,type = "probs")
+head(predicted_probs)
+```
+
+```{r}
+#Performance of the Model on Train and Test Set:
+#For TRAIN
+predicted_probs_train <- predict(model, type = "probs")
+predicted_class_train <- colnames(predicted_probs_train)[apply(predicted_probs_train, 1,which.max)]
+print(c("Train:", mean(predicted_class_train == train$status)))
+#For TEST
+predicted_probs_test <- predict(model, test, type = "probs")
+predicted_class_test <- colnames(predicted_probs_test)[apply(predicted_probs_test, 1, which.max)]
+print(c("Test:", mean(predicted_class_test == test$status)))
+```
+
+```{r}
+#Confusion Matrix of The Model
+confmatr <- table(predicted = predicted_class_test, actual = test$status)
+confmatr
+```
+
+```{r}
+# Accuracy of The Model
+acc <- sum(diag(confmatr)) / sum(confmatr)
+acc
+
+```
+

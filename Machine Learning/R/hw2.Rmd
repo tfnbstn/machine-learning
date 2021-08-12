@@ -1,0 +1,72 @@
+---
+title: "Homework2"
+author: "Tufan"
+date: "12 03 2021"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r}
+#install.packages("AER")
+library(AER)
+  longley
+
+```
+Splitting Data;
+```{r}
+set.seed(2380)
+data_splitted <- sample(nrow(longley), nrow(longley) * 0.8)
+training_data <- longley[data_splitted,]
+testing_data  <- longley[-data_splitted,]
+nrow(training_data);nrow(testing_data)
+```
+
+Training a LMR
+```{r}
+#install.packages("dplyr")
+library(dplyr)
+glimpse(longley)
+```
+```{r}
+model <- lm(Employed~.,data=training_data)
+summary(model)
+```
+```{r}
+predicted_train <- predict(model,training_data)
+modelEvaluation_training <- data.frame(training_data$Employed,predicted_train)
+colnames(modelEvaluation_training) <- c("Actual","Predicted_train")
+modelEvaluation_training
+```
+```{r}
+predicted_test <- predict(model,testing_data)
+modelEvaluation_test <- data.frame(testing_data$Employed,predicted_test)
+colnames(modelEvaluation_test) <- c("Actual","Predicted_test")
+modelEvaluation_test
+```
+
+performance:
+```{r}
+mse_train <- mean((modelEvaluation_training$Actual - modelEvaluation_training$Predicted_train)^2)
+mae_train <- mean(abs(modelEvaluation_training$Actual - modelEvaluation_training$Predicted_train))
+rmse_train <- sqrt(mse_train)
+mape_train <- mean(abs((modelEvaluation_training$Actual-modelEvaluation_training$Predicted_train)/modelEvaluation_training$Actual)) * 100
+mse_train;rmse_train;mae_train;mape_train
+```
+
+
+```{r}
+mse_test <- mean((modelEvaluation_test$Actual - modelEvaluation_test$Predicted_test)^2)
+mae_test <- mean(abs(modelEvaluation_test$Actual - modelEvaluation_test$Predicted_test))
+rmse_test <- sqrt(mse_test)
+mape_test <- mean(abs((modelEvaluation_test$Actual-modelEvaluation_test$Predicted_test)/modelEvaluation_test$Actual)) * 100
+mse_test;rmse_test;mae_test;mape_test
+```
+```{r}
+performence <- data.frame("Train"=c(mse_train,rmse_train,mae_train,mape_train),
+                          "Test"=c(mse_test,rmse_test,mae_test,mape_test),
+                          "Difference"=c(mse_train-mse_test,rmse_train-rmse_test,mae_train-mae_test,mape_train-mape_test),
+                          row.names = c("Mean S. Error", "Root Mean S. Error","Mean Abs. Error","Mean Abs. Per. Error"))
+performence
+```
+

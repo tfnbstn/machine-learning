@@ -1,0 +1,78 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r}
+data <- carData::Salaries
+head(data)
+str(data)
+summary(data)
+```
+
+DATA SPLITING
+
+```{r}
+library(caret)
+set.seed(2380)
+index <- createDataPartition(data$salary, p = 0.75,
+list = FALSE, times = 1)
+train <- data[index,]
+test <- data[-index,]
+nrow(train)
+nrow(test)
+```
+
+
+LINEER REGRESSION MODEL
+
+
+```{r}
+#Traing Model
+model <- lm(salary~.,data=train)
+#Performance for Train
+predicted_train <- predict(model,train)
+modelEvaluation_train <- data.frame(train$salary,predicted_train)
+colnames(modelEvaluation_train) <- c("Actual","Predicted_train")
+mse_train <- mean((modelEvaluation_train$Actual - modelEvaluation_train$Predicted_train)^2)
+print(c("Train:",sqrt(mse_train)))
+#Performance for Test
+predicted_test <- predict(model,test)
+modelEvaluation_test <- data.frame(test$salary,predicted_test)
+colnames(modelEvaluation_test) <- c("Actual","Predicted_test")
+mse_test <- mean((modelEvaluation_test$Actual - modelEvaluation_test$Predicted_test)^2)
+print(c("Test:",sqrt(mse_test)))
+```
+
+DECISION TREE
+
+```{r}
+library(rpart)
+library(rpart.plot)
+#Training Model
+model_dt <- rpart(salary ~. , method = "anova", data = train)
+rpart.plot(model_dt)
+```
+
+```{r}
+#Performance on Test
+preds_test <- predict(model_dt, test)
+rmse_test <- sqrt(mean((preds_test - test$salary) ^ 2))
+cat("test_rmse:", rmse_test,"\n")
+#Performance on Train
+preds_train <- predict(model_dt, train)
+rmse_train <- sqrt(mean((preds_train - train$salary) ^ 2))
+cat("train_mse:", rmse_train)
+```
+
+
+COMPARISON
+```{r}
+#Comparing models performances
+data.frame(
+  "LRM" = c(sqrt(mse_train),sqrt(mse_test)),
+  "Decision Tree" = c(rmse_train,rmse_test),
+  row.names = c("Train Root Mean S. Error", "Test Root Mean S. Error")
+)
+```
+
