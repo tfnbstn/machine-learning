@@ -1,6 +1,6 @@
 # Machine Learning Methods and Applications
 
-This section includes some Machine Learning applications using R and reports.  
+This section includes some Machine Learning applications and reports using R.  
 
 ## Contents
 
