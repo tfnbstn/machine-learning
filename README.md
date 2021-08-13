@@ -1,6 +1,6 @@
 # Machine Learning Methods and Applications
 
-This a undergraduate course page of Machine Learning Methods and Applications in Eskisehir Technical University, Department of Statistics.
+This section includes some Machine Learning applications. 
 
 ## Contents
 
